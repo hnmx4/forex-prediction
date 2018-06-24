@@ -42,7 +42,7 @@ class CsvImporter:
 
         return list(map(lambda x: x[price_type[t]], hdata))
 
-    def transform_minutes(self, minutes, hdata):
+    def convert_minutes(self, minutes, hdata):
         ret = []
         for i in range(0, len(hdata), minutes):
             part = hdata[i:i + minutes]
@@ -59,9 +59,10 @@ class CsvImporter:
         return ret
 
     def show_graph(self):
-        hdata_15 = self.transform_minutes(15, self.historical_data)
+        hdata_15 = self.convert_minutes(15, self.historical_data)
 
         ax = plt.subplot()
+        ax.grid(color='gray', linestyle='--', linewidth=0.5)
         mpf.candlestick2_ohlc(
             ax,
             self.gen_prices('opening', hdata_15),
