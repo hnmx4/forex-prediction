@@ -2,7 +2,6 @@ import csv
 import os
 import matplotlib.pyplot as plt
 import mpl_finance as mpf
-import numpy as np
 
 
 class CsvImporter:
