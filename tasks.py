@@ -1,7 +1,7 @@
 from invoke import task
-from src import csv_importer
+from src.utility import Utility
 
 @task
 def show(ctx):
-    importer = csv_importer.CsvImporter()
-    importer.show_graph()
+    utility = Utility()
+    utility.show_graph()
