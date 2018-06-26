@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import mpl_finance as mpf
+import pandas as pd
+import numpy as np
 
 from .csv_importer import CsvImporter
 
@@ -21,20 +23,22 @@ class Utility:
 
         return list(map(lambda x: x[price_type[t]], hdata))
 
-    def convert_minutes(self, minutes, hdata):
-        ret = []
+    @staticmethod
+    def convert_minutes(minutes, hdata):
+        ret = pd.DataFrame()
         for i in range(0, len(hdata), minutes):
             part = hdata[i:i + minutes]
-            ret.append([
-                part[0][0],  # data
-                part[0][1],  # time
-                part[0][2],  # opening
-                part[-1][3],  # closing
-                min(self.gen_prices("low", part)),  # low
-                max(self.gen_prices("high", part)),  # high
-                sum(self.gen_prices("volume", part))  # volume
-            ])
-
+            df = pd.DataFrame(columns=[
+                'opening', 'closing', 'low', 'high', 'volume', 'date-time'
+            ], data=[[
+                part.loc[i, 'opening'],
+                part.loc[i + len(part) - 1, 'closing'],
+                min(part.low.values),
+                max(part.high.values),
+                np.sum(part.volume.values),
+                part.loc[i, 'date-time']
+            ]])
+            ret = ret.append(df)
         return ret
 
     def show_graph(self):
@@ -44,10 +48,10 @@ class Utility:
         ax.grid(color='gray', linestyle='--', linewidth=0.5)
         mpf.candlestick2_ohlc(
             ax,
-            self.gen_prices('opening', hdata_15),
-            self.gen_prices('high', hdata_15),
-            self.gen_prices('low', hdata_15),
-            self.gen_prices('closing', hdata_15),
+            hdata_15.opening.values,
+            hdata_15.high.values,
+            hdata_15.low.values,
+            hdata_15.closing.values,
             0.5, 'r', 'b'
         )
 
