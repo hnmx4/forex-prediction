@@ -23,26 +23,10 @@ class Utility:
 
         return list(map(lambda x: x[price_type[t]], hdata))
 
-    @staticmethod
-    def convert_minutes(minutes, hdata):
-        ret = pd.DataFrame()
-        for i in range(0, len(hdata), minutes):
-            part = hdata[i:i + minutes]
-            df = pd.DataFrame(columns=[
-                'opening', 'closing', 'low', 'high', 'volume', 'date-time'
-            ], data=[[
-                part.loc[i, 'opening'],
-                part.loc[i + len(part) - 1, 'closing'],
-                min(part.low.values),
-                max(part.high.values),
-                np.sum(part.volume.values),
-                part.loc[i, 'date-time']
-            ]])
-            ret = ret.append(df)
-        return ret
-
     def show_graph(self):
-        hdata_15 = self.convert_minutes(15, self.historical_data)
+        print(self.historical_data.head())
+        hdata_15 = self.historical_data.resample(rule='15M').ohlc()  # not working
+        print(hdata_15.head())
 
         ax = plt.subplot()
         ax.grid(color='gray', linestyle='--', linewidth=0.5)

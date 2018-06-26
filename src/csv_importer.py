@@ -26,4 +26,5 @@ class CsvImporter:
         source['date-time'] = source['date'].str.cat(source['time'], sep='-')
         source.drop(['date', 'time'], axis=1, inplace=True)
         source['date-time'] = source['date-time'].map(lambda x: pd.to_datetime(x))
+        source = source.set_index('date-time')
         self.historical_data = source
