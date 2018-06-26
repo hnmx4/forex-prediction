@@ -1,5 +1,5 @@
-import csv
 import os
+import pandas as pd
 
 
 class CsvImporter:
@@ -16,13 +16,14 @@ class CsvImporter:
             lambda x: os.path.join(data_dir, x),
             list(filter(lambda x: x.find(".csv") > 0, files))))
 
-        hdata = []
+        source = pd.DataFrame()
         for filename in filenames:
             with open(filename, newline='') as f:
-                # historical data format:
-                # [date, time, opening, closing, low, high, volume]
-                hdata.extend(list(csv.reader(f)))
-        for row in hdata:
-            for i in range(2, 7):
-                row[i] = float(row[i])
-        self.historical_data = hdata
+                df = pd.read_csv(filename, header=None, names=[
+                    'date', 'time', 'opening', 'closing', 'low', 'high', 'volume'])
+                source = source.append(df)
+
+        source['date-time'] = source['date'].str.cat(source['time'], sep='-')
+        source.drop(['date', 'time'], axis=1, inplace=True)
+        source['date-time'] = source['date-time'].map(lambda x: pd.to_datetime(x))
+        self.historical_data = source
