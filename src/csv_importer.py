@@ -20,11 +20,12 @@ class CsvImporter:
         for filename in filenames:
             with open(filename, newline='') as f:
                 df = pd.read_csv(filename, header=None, names=[
-                    'date', 'time', 'opening', 'closing', 'low', 'high', 'volume'])
+                    'date', 'time', 'open', 'close', 'low', 'high', 'volume'])
                 source = source.append(df)
 
         source['date-time'] = source['date'].str.cat(source['time'], sep='-')
         source.drop(['date', 'time'], axis=1, inplace=True)
         source['date-time'] = source['date-time'].map(lambda x: pd.to_datetime(x))
         source = source.set_index('date-time')
+        source = source.ix[:, ['open', 'high', 'low', 'close', 'volume']]
         self.historical_data = source
