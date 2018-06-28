@@ -22,18 +22,16 @@ class Utility:
         }
         return pd.DataFrame(data=ret, columns=['open', 'high', 'low', 'close'], index=ohlc.index).dropna()
 
-    def show_graph(self):
-        hdata_15 = self.format_ohlc(self.historical_data.resample(rule='15Min'))
-        print(hdata_15.head())
-
+    @staticmethod
+    def show_graph(ohlc):
         ax = plt.subplot()
         ax.grid(color='gray', linestyle='--', linewidth=0.5)
         mpf.candlestick2_ohlc(
             ax,
-            hdata_15.open.values,
-            hdata_15.high.values,
-            hdata_15.low.values,
-            hdata_15.close.values,
+            ohlc.open.values,
+            ohlc.high.values,
+            ohlc.low.values,
+            ohlc.close.values,
             0.5, 'r', 'b'
         )
 
