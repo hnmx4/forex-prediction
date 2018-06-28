@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 
-class CsvImporter:
+class Importer:
     def __init__(self):
         data_dir = os.path.join(
             os.path.abspath(os.path.dirname(os.path.dirname(__file__))),
