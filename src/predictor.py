@@ -2,11 +2,11 @@ import matplotlib.pyplot as plt
 from statsmodels.tsa.ar_model import AR
 
 
-class Forecaster:
+class Predictor:
     def __init__(self, ohlc):
         self.ohlc = ohlc
 
-    def forecast(self):
+    def predict(self):
         ts = self.ohlc.ix[:, 'close']
         Y = ts.values
         train, test = Y[1:len(Y) - 96], Y[len(Y) - 96:]

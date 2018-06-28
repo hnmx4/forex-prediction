@@ -1,7 +1,7 @@
 from invoke import task
 from src.utility import Utility
 from src.importer import Importer
-from src.forecaster import Forecaster
+from src.predictor import Predictor
 
 
 @task
@@ -20,5 +20,5 @@ def forecast(ctx):
     importer = Importer()
     ohlc_15min = utility.resample_ohlc(importer.historical_data, '15Min')
 
-    forecaster = Forecaster(ohlc_15min)
-    forecaster.forecast()
+    predictor = Predictor(ohlc_15min)
+    predictor.predict()
