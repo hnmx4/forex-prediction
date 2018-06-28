@@ -3,12 +3,12 @@ import mpl_finance as mpf
 import pandas as pd
 
 
-from .csv_importer import CsvImporter
+from .importer import Importer
 
 
 class Utility:
     def __init__(self):
-        importer = CsvImporter()
+        importer = Importer()
         self.historical_data = importer.historical_data
 
     @staticmethod
