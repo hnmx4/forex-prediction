@@ -15,10 +15,10 @@ def show(ctx):
     utility.show_graph(ohlc_15min)
 
 @task
-def forecast(ctx):
+def preditc(ctx):
     utility = Utility()
     importer = Importer()
     ohlc_15min = utility.resample_ohlc(importer.historical_data, '15Min')
 
     predictor = Predictor(ohlc_15min)
-    predictor.predict()
+    predictor.predict_ar2()
