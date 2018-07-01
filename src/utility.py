@@ -12,8 +12,8 @@ class Utility:
         self.historical_data = importer.historical_data
 
     @staticmethod
-    def format_ohlc(df):
-        ohlc = df.ohlc()
+    def resample_ohlc(df, rule):
+        ohlc = df.resample(rule=rule).ohlc()
         ret = {
             'open': ohlc['open']['open'].values,
             'high': ohlc['high']['high'].values,
