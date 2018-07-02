@@ -14,12 +14,9 @@ class Predictor:
         train = np.empty((0, _step))
         ts = self.ohlc.ix[:, 'close']
         for i in range(_step, len(ts), _step):
-            np.append(train, np.array(ts.iloc[i - _step:i].values.reshape(1, _step)), axis=0)
+            train = np.append(train, np.array(ts.iloc[i - _step:i].values.reshape(1, _step)), axis=0)
 
-        print(train.shape)
-        print(train)
-
-        kmeans = KMeans(n_clusters=8, random_state=0).fit(train)
+        kmeans = KMeans(n_clusters=3, random_state=0).fit(train)
         print(kmeans.labels_)
 
     def predict_ar(self):
