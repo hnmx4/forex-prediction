@@ -1,11 +1,23 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from statsmodels.tsa.ar_model import AR
 from sklearn.metrics import mean_squared_error
+from sklearn.cluster import KMeans
 
 
 class Predictor:
     def __init__(self, ohlc):
         self.ohlc = ohlc
+
+    def kmeans(self):
+        _step = 96
+        train = np.empty((0, _step))
+        ts = self.ohlc.ix[:, 'close']
+        for i in range(_step, len(ts), _step):
+            train = np.append(train, np.array(ts.iloc[i - _step:i].values.reshape(1, _step)), axis=0)
+
+        kmeans = KMeans(n_clusters=3, random_state=0).fit(train)
+        print(kmeans.labels_)
 
     def predict_ar(self):
         ts = self.ohlc.ix[:, 'close']
@@ -42,7 +54,7 @@ class Predictor:
             lag = [history[i] for i in range(length - window, length)]
             yhat = coef[0]
             for d in range(window):
-                yhat += coef[d + 1] * lag[window-d-1]
+                yhat += coef[d + 1] * lag[window - d - 1]
             obs = test[t]
             predictions.append(yhat)
             history.append(obs)
